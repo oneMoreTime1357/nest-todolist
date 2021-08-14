@@ -1,27 +1,42 @@
-import { Controller, Get, Req, Post, Param, Body } from '@nestjs/common';
-import { Request } from 'express';
-import { ResponseData } from '../common/interfaces/result.interface';
-import { CreateUserDto } from './dto/create-user.dto';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Put,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
+import { User } from './user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private service: UsersService) {}
 
   @Get()
-  findAll(@Req() request: Request): string {
-    return 'string sad';
-  }
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    // return 'This action adds a new cat';
-    this.usersService.create(createUserDto);
+  getAll() {
+    return this.service.getUsers();
   }
 
   @Get(':id')
-  findOne(@Param() params): string {
-    console.log(params.id);
-    return `This action returns a #${params.id} cat`;
+  get(@Param() params) {
+    return this.service.getUser(params.id);
+  }
+
+  @Post()
+  create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.service.create(createUserDto);
+  }
+
+  @Put()
+  update(@Body() user: User) {
+    return this.service.updateUser(user);
+  }
+
+  @Delete(':id')
+  deleteUser(@Param() params) {
+    return this.service.deleteUser(params.id);
   }
 }
