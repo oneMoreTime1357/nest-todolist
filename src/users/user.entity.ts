@@ -8,9 +8,6 @@ export class User {
   @Column()
   name: string;
 
-  // @Column('date')
-  // birthday: string;
-
   @Column({ type: 'boolean', default: false })
   isActive: boolean;
 }
